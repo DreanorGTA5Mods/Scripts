@@ -1,0 +1,22 @@
+<html>
+    <head>  
+		<link rel="stylesheet" type="text/css" href="styles.css"/>	
+    </head>
+
+    <body>
+        <video id="video" autoplay loop>
+            <source src="intro.mp4" 
+                    type="video/mp4">
+        </video>
+                    
+        <audio id="audio" autoplay loop>
+            <source src="music.mp3"
+                    type="audio/mp3">
+        </audio>
+
+        <script>
+            var audio = document.getElementById("audio");
+            audio.volume = 0.1;
+        </script>
+    </body>
+</html>

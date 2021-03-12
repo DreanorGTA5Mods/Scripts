@@ -1,0 +1,7 @@
+.idea*
+.fxdk*
+build*
+cfx-server-data*
+fxproject.json*
+cfx-server-data.fxmeta*
+/loadscreen/music.mp3
