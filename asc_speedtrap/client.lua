@@ -1,5 +1,7 @@
 local currentPlayer = GetPlayerPed(-1)
-local speedcams = {}
+local speedcams = {} --object size speed
+local units = 3.6 --kmh
+--local units = 2.23694 --mph
 
 RegisterCommand('create', function(source, args, rawCommand)
     -- Create object
@@ -22,20 +24,33 @@ RegisterCommand('create', function(source, args, rawCommand)
     
     -- Persist
     SetEntityAsMissionEntity(object, true, true)
-    AddBlipForEntity(object)
-    speedcams[#speedcams+1] = object    
+    local blip = AddBlipForEntity(object)
+
+    speedcam = { cam = object, size = tonumber(args[1]) + .0, speed = tonumber(args[2]), blip = blip }
+    speedcams[#speedcams+1] = speedcam    
 end)
 
+function GetSpeed()
+    local vehicle = GetVehiclePedIsIn(currentPlayer, false)
+    local speed = GetEntitySpeed(vehicle)
+
+    return math.floor(speed*units, 2)
+end
 
 Citizen.CreateThread(function()
     while true do
         Citizen.Wait(0)
         for i, obj in ipairs(speedcams) do
-            local pos = GetEntityCoords(obj)
+            local trapPos = GetEntityCoords(obj.cam)
 
-            local x,y,z = table.unpack(GetOffsetFromEntityInWorldCoords(obj, 0.0, -20.0, 0.0))
-            local lensOffset = 0.16
-            DrawLine(pos.x, pos.y, pos.z + lensOffset, x, y, z + lensOffset, 255, 0, 0, 255)  
+            DrawMarker(1, trapPos.x, trapPos.y, trapPos.z + 2, 0.0, 0.0, 0.0, 0.0, 180.0, 0.0, obj.size, obj.size, obj.size, 255, 0, 0, 50, false, true, 2, nil, nil, false)
+            local playerPos = GetEntityCoords(currentPlayer);
+            if(IsPedInAnyVehicle(currentPlayer) 
+                and GetDistanceBetweenCoords(trapPos, playerPos, true) < obj.size / 2
+                and GetSpeed() > obj.speed) then
+                --busted...
+                print(playerPos)            
+            end
         end
     end
 end)
