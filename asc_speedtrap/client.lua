@@ -3,7 +3,16 @@ local speedcams = {} --object size speed
 local units = 3.6 --kmh
 --local units = 2.23694 --mph
 
+TriggerEvent('chat:addSuggestion', '/create', 'creates a speedtrap', {
+    { name="size", help="size of the speedtrap" },
+    { name="speed", help="speed on which to trigger" }
+})
+
 RegisterCommand('create', function(source, args, rawCommand)
+    if args[2] == nil then
+        return
+    end
+    
     -- Create object
     local hash = GetHashKey("prop_cs_cctv")
     RequestModel(hash)
@@ -37,7 +46,13 @@ function GetSpeed()
     return math.floor(speed*units, 2)
 end
 
+function SpeedTrapTriggered(speedcam, speed)
+    --add whatever
+    
+end
+
 Citizen.CreateThread(function()
+    
     while true do
         Citizen.Wait(0)
         for i, obj in ipairs(speedcams) do
@@ -45,12 +60,13 @@ Citizen.CreateThread(function()
 
             DrawMarker(1, trapPos.x, trapPos.y, trapPos.z + 2, 0.0, 0.0, 0.0, 0.0, 180.0, 0.0, obj.size, obj.size, obj.size, 255, 0, 0, 50, false, true, 2, nil, nil, false)
             local playerPos = GetEntityCoords(currentPlayer);
+            local vehSpeed = GetSpeed()
             if(IsPedInAnyVehicle(currentPlayer) 
                 and GetDistanceBetweenCoords(trapPos, playerPos, true) < obj.size / 2
-                and GetSpeed() > obj.speed) then
-                --busted...
-                print(playerPos)            
+                and vehSpeed > obj.speed) then
+                SpeedTrapTriggered(obj, vehSpeed)         
             end
         end
     end
 end)
+
