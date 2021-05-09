@@ -8,8 +8,22 @@ TriggerEvent('chat:addSuggestion', '/create', 'creates a speedtrap', {
     { name="speed", help="speed on which to trigger" }
 })
 
+function HasMissingArgs(args)
+	if args[1] == nil then
+		TriggerEvent('chat:addMessage', { color = { 255, 0, 0}, multiline = true, args = {"Error", "Missing [size] argument for the speedtrap."} })
+        return true
+    end
+	
+	if args[2] == nil then
+		TriggerEvent('chat:addMessage', { color = { 255, 0, 0}, multiline = true, args = {"Error", "Missing [speed] argument for the speedtrap."} })
+        return true
+    end
+	
+	return false
+end
+
 RegisterCommand('create', function(source, args, rawCommand)
-    if args[2] == nil then
+    if HasMissingArgs(args) then
         return
     end
     
@@ -52,7 +66,6 @@ function SpeedTrapTriggered(speedcam, speed)
 end
 
 Citizen.CreateThread(function()
-    
     while true do
         Citizen.Wait(0)
         for i, obj in ipairs(speedcams) do
