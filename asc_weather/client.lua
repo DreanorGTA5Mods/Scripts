@@ -18,7 +18,7 @@ HALLOWEEN
 
 Citizen.CreateThread(function()
     while true do
-        permaWeather = "EXTRASUNNY"
+        permaWeather = "HALLOWEEN"
         SetWeatherTypePersist(permaWeather)
         SetWeatherTypeNowPersist(permaWeather)
         SetWeatherTypeNow(permaWeather)
