@@ -82,9 +82,9 @@ Citizen.CreateThread(function()
         
             if (enableMph == true) 
             then 
-                DrawMinimapText("" .. math.floor(speed*mph, 2) .." mph", 0)
+                DrawMinimapText("" .. math.floor(speed*mph, 2) .." MPH", 0)
             else 
-                DrawMinimapText("" .. math.floor(speed*kmh, 2) .." km/h", 0)
+                DrawMinimapText("" .. math.floor(speed*kmh, 2) .." Km/h", 0)
             end
         end
     end
